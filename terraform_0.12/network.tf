@@ -1,47 +1,48 @@
 resource "oci_core_virtual_network" "K8SVNC" {
-  cidr_block     = "${var.VPC-CIDR}"
-  compartment_id = "${var.compartment_ocid}"
-  display_name   = "K8S-VNC"
+  cidr_block     = var.VPC-CIDR
+  compartment_id = var.compartment_ocid
+  display_name   = "K8S-VNC-jle-nov"
   dns_label      = "k8s"
 }
 
+
 resource "oci_core_internet_gateway" "K8SIG" {
-  compartment_id = "${var.compartment_ocid}"
+  compartment_id = var.compartment_ocid
   display_name   = "K8S-IG"
-  vcn_id         = "${oci_core_virtual_network.K8SVNC.id}"
+  vcn_id         = oci_core_virtual_network.K8SVNC.id
 }
 
 resource "oci_core_route_table" "RouteForK8S" {
-  compartment_id = "${var.compartment_ocid}"
-  vcn_id         = "${oci_core_virtual_network.K8SVNC.id}"
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.K8SVNC.id
   display_name   = "RouteTableForK8SVNC"
 
   route_rules {
     destination        = "0.0.0.0/0"
-    network_entity_id = "${oci_core_internet_gateway.K8SIG.id}"
+    network_entity_id = oci_core_internet_gateway.K8SIG.id
   }
 }
 
 resource "oci_core_security_list" "WorkerSecList" {
-  compartment_id = "${var.compartment_ocid}"
+  compartment_id = var.compartment_ocid
   display_name   = "WorkerSecList"
-  vcn_id         = "${oci_core_virtual_network.K8SVNC.id}"
+  vcn_id         = oci_core_virtual_network.K8SVNC.id
 
   ingress_security_rules {
     protocol = "all"
-    source   = "${lookup(var.network_cidrs,"workerSubnetAD1")}"
+    source   = lookup(var.network_cidrs,"workerSubnetAD1")
     stateless = true
   }
 
   ingress_security_rules {
     protocol = "all"
-    source   = "${lookup(var.network_cidrs,"workerSubnetAD2")}"
+    source   = lookup(var.network_cidrs,"workerSubnetAD2")
     stateless = true
    }
 
    ingress_security_rules {
      protocol = "all"
-     source   = "${lookup(var.network_cidrs,"workerSubnetAD3")}"
+     source   = lookup(var.network_cidrs,"workerSubnetAD3")
      stateless = true
    }
 
@@ -93,28 +94,28 @@ resource "oci_core_security_list" "WorkerSecList" {
 
   egress_security_rules {
     protocol = "all"
-    destination   = "${lookup(var.network_cidrs,"workerSubnetAD1")}"
+    destination   = lookup(var.network_cidrs,"workerSubnetAD1")
     stateless = true
   }
 
   egress_security_rules {
     protocol = "all"
-    destination   = "${lookup(var.network_cidrs,"workerSubnetAD2")}"
+    destination   = lookup(var.network_cidrs,"workerSubnetAD2")
     stateless = true
    }
 
    egress_security_rules {
      protocol = "all"
-     destination   = "${lookup(var.network_cidrs,"workerSubnetAD3")}"
+     destination   = lookup(var.network_cidrs,"workerSubnetAD3")
      stateless = true
    }
 
 }
 
 resource "oci_core_security_list" "LoadBalancerSecList" {
-  compartment_id = "${var.compartment_ocid}"
+  compartment_id = var.compartment_ocid
   display_name   = "LoadBalancerSecList"
-  vcn_id         = "${oci_core_virtual_network.K8SVNC.id}"
+  vcn_id         = oci_core_virtual_network.K8SVNC.id
 
   ingress_security_rules {
      protocol = "6"
@@ -151,23 +152,23 @@ resource "oci_core_security_list" "LoadBalancerSecList" {
 }
 
 resource "oci_core_subnet" "workerSubnet" {
-  cidr_block          = "${lookup(var.network_cidrs, "workerSubnetAD1")}"
+  cidr_block          = lookup(var.network_cidrs, "workerSubnetAD1")
   display_name        = "workerSubnet"
-  compartment_id      = "${var.compartment_ocid}"
-  vcn_id              = "${oci_core_virtual_network.K8SVNC.id}"
-  route_table_id      = "${oci_core_route_table.RouteForK8S.id}"
-  security_list_ids   = ["${oci_core_security_list.WorkerSecList.id}"]
-  dhcp_options_id     = "${oci_core_virtual_network.K8SVNC.default_dhcp_options_id}"
+  compartment_id      = var.compartment_ocid
+  vcn_id              = oci_core_virtual_network.K8SVNC.id
+  route_table_id      = oci_core_route_table.RouteForK8S.id
+  security_list_ids   = [oci_core_security_list.WorkerSecList.id]
+  dhcp_options_id     = oci_core_virtual_network.K8SVNC.default_dhcp_options_id
   dns_label           = "worker"
 }
 
 resource "oci_core_subnet" "LoadBalancerSubnet" {
-  cidr_block          = "${lookup(var.network_cidrs, "LoadBalancerSubnetAD1")}"
+  cidr_block          = lookup(var.network_cidrs, "LoadBalancerSubnetAD1")
   display_name        = "LoadBalancerSubnet"
-  compartment_id      = "${var.compartment_ocid}"
-  vcn_id              = "${oci_core_virtual_network.K8SVNC.id}"
-  route_table_id      = "${oci_core_route_table.RouteForK8S.id}"
-  security_list_ids   = ["${oci_core_security_list.LoadBalancerSecList.id}"]
-  dhcp_options_id     = "${oci_core_virtual_network.K8SVNC.default_dhcp_options_id}"
+  compartment_id      = var.compartment_ocid
+  vcn_id              = oci_core_virtual_network.K8SVNC.id
+  route_table_id      = oci_core_route_table.RouteForK8S.id
+  security_list_ids   = [oci_core_security_list.LoadBalancerSecList.id]
+  dhcp_options_id     = oci_core_virtual_network.K8SVNC.default_dhcp_options_id
   dns_label           = "loadbalancer"
 }
