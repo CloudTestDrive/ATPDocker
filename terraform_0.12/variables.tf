@@ -3,6 +3,22 @@ variable "tenancy_ocid" {}
 
 variable "compartment_ocid" {}
 
+variable "OKE_Name" {
+  default = "OKE_Lab_Cluster"
+}
+
+variable "OKE_Network_name" {
+  default = "OKE_Lab_Network"
+}
+
+variable "OKE_Cluster_Nb" {
+  default = "1"
+}
+
+variable "Participant_Initials" {
+  default = "xyz"
+}
+
 variable "network_cidrs" {
   type = map(string)
 

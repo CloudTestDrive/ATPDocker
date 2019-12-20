@@ -1,7 +1,7 @@
 resource "oci_core_virtual_network" "K8SVNC" {
   cidr_block     = var.VPC-CIDR
   compartment_id = var.compartment_ocid
-  display_name   = "K8S-VNC-jle-nov"
+  display_name = format("%s_%s",var.OKE_Network_name,var.Participant_Initials)
   dns_label      = "k8s"
 }
 

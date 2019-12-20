@@ -15,3 +15,4 @@ user_ocid = "ocid1.user.oc1.....your_ocid"
 region = "eu-frankfurt-1"
 
 k8sWorkerShape = "VM.Standard2.1"
+Participant_Initials = "ABC"
