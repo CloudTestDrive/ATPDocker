@@ -56,7 +56,7 @@ resource "oci_containerengine_node_pool" "K8S_pool1" {
 data "oci_containerengine_cluster_kube_config" "test_cluster_kube_config" {
   #Required
   cluster_id = oci_containerengine_cluster.k8s_cluster[count.index].id
-	token_version = "1.0.0"
+	token_version = "2.0.0"
 	count = var.OKE_Cluster_Nb
 }
 
