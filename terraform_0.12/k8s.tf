@@ -1,7 +1,7 @@
 
 resource "oci_containerengine_cluster" "k8s_cluster" {
 	compartment_id = var.compartment_ocid
-	kubernetes_version = "v1.13.5"
+	kubernetes_version = "v1.15.7"
 	name = format("%s_%s_%d",var.OKE_Name,var.Participant_Initials, count.index)
 	vcn_id = oci_core_virtual_network.K8SVNC.id
 
@@ -23,7 +23,7 @@ resource "oci_containerengine_node_pool" "K8S_pool1" {
 	count = var.OKE_Cluster_Nb
 	cluster_id = oci_containerengine_cluster.k8s_cluster[count.index].id
 	compartment_id = var.compartment_ocid
-  kubernetes_version = "v1.13.5"
+  kubernetes_version = "v1.15.7"
 	name = "K8S_pool1"
 	node_image_name = var.worker_ol_image_name
 	node_shape = var.k8sWorkerShape

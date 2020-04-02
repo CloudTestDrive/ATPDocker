@@ -56,15 +56,6 @@ variable "domain_name" {
   default = "kubernetes.oraclevcn.com"
 }
 
-variable "user_ocid" {
-}
-
-variable "fingerprint" {
-}
-
-variable "private_key_path" {
-}
-
 variable "region" {
   default = "us-phoenix-1"
 }
