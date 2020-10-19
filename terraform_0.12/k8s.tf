@@ -53,6 +53,13 @@ resource "oci_containerengine_node_pool" "K8S_pool1" {
 	}
 
 #	ssh_public_key = var.node_pool_ssh_public_key
+
+node_source_details {
+    #Required
+    image_id    = local.oracle_linux_images.0
+    source_type = "IMAGE"
+  }
+
 }
 
 
