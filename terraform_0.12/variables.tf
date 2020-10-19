@@ -336,21 +336,6 @@ variable "k8s_dns_ver" {
   default = "1.14.2"
 }
 
-variable "master_ol_image_name" {
-  default = "Oracle-Linux-7.5-2018.07.20-0"
-}
-
-variable "worker_ol_image_name" {
-  default = "Oracle-Linux-7.6"
-}
-
-variable "etcd_ol_image_name" {
-  default = "Oracle-Linux-7.5-2018.07.20-0"
-}
-
-variable "nat_ol_image_name" {
-  default = "Oracle-Linux-7.5-2018.07.20-0"
-}
 
 variable "control_plane_subnet_access" {
   description = "Whether instances in the control plane are launched in a public or private subnets"
