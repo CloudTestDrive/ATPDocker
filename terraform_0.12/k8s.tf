@@ -1,11 +1,16 @@
 
 resource "oci_containerengine_cluster" "k8s_cluster" {
 	compartment_id = var.compartment_ocid
-	kubernetes_version = "v1.16.8"
+	kubernetes_version = var.OKE_Version
 	name = format("%s_%s_%d",var.OKE_Name,var.Participant_Initials, count.index)
 	vcn_id = oci_core_virtual_network.K8SVNC.id
 
 	count = var.OKE_Cluster_Nb
+
+	endpoint_config {
+        is_public_ip_enabled = true
+        subnet_id = oci_core_subnet.k8sendpointSubnet.id
+    }
 
 	options {
 
@@ -16,6 +21,8 @@ resource "oci_containerengine_cluster" "k8s_cluster" {
 		service_lb_subnet_ids = [oci_core_subnet.LoadBalancerSubnet.id]
 	}
 }
+
+
 
 data "oci_containerengine_node_pool_option" "test_node_pool_option" {
 	  node_pool_option_id = "all"
@@ -36,7 +43,7 @@ resource "oci_containerengine_node_pool" "K8S_pool1" {
 	count = var.OKE_Cluster_Nb
 	cluster_id = oci_containerengine_cluster.k8s_cluster[count.index].id
 	compartment_id = var.compartment_ocid
-  kubernetes_version = "v1.16.8"
+  kubernetes_version = var.OKE_Version
 	name = "K8S_pool1"
 	node_shape = var.k8sWorkerShape
 

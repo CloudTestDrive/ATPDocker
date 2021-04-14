@@ -7,3 +7,5 @@ region = "eu-frankfurt-1"
 
 k8sWorkerShape = "VM.Standard2.1"
 Participant_Initials = "ABC"
+
+OKE_Version = "v1.19.7"

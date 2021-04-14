@@ -1,5 +1,8 @@
 # OCI Service
 variable "tenancy_ocid" {}
+variable "fingerprint" {}
+variable "private_key_path" {}
+variable "user_ocid" {}
 
 variable "compartment_ocid" {}
 
@@ -19,11 +22,17 @@ variable "Participant_Initials" {
   default = "xyz"
 }
 
+
+variable "OKE_Version" {
+  default = "v1.19.7"
+}
+
 variable "network_cidrs" {
   type = map(string)
 
   default = {
     VCN-CIDR              = "10.0.0.0/16"
+    k8sendpointSubnet     = "10.0.0.0/28"
     workerSubnetAD1       = "10.0.10.0/24"
     workerSubnetAD2       = "10.0.11.0/24"
     workerSubnetAD3       = "10.0.12.0/24"
